@@ -143,9 +143,9 @@ const ProductView = ({ params }) => {
               texPNG={product.data.texPng}
             />
           </div>
-          {/*<div className="absolute w-full h-full z-10">
+          <div className="absolute w-full h-full z-10">
             <ProductViewInfoCard productInfo={product} />
-          </div>*/}
+          </div>
         </section>
       )}
     </main>
