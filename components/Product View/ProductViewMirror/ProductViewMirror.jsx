@@ -49,7 +49,7 @@ const ProductViewMirror = ({
       width="100%"
       height="100%"
       allow="camera"
-      style={{ transform: 'scale(0.5)' }}
+      
       className="z-0 border-2 border-red-500 overflow-clip"
     ></iframe>
   );
