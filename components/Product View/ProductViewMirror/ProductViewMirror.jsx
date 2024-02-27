@@ -49,7 +49,6 @@ const ProductViewMirror = ({
       width="100%"
       height="100%"
       allow="camera"
-      
       className="z-0 border-2 border-red-500 overflow-clip"
     ></iframe>
   );

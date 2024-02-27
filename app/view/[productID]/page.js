@@ -135,8 +135,8 @@ const ProductView = ({ params }) => {
         <section className="flex flex-col items-center justify-center w-full h-full">
           <div className="flex items-center justify-center w-full h-full text-white bg-gray-900">
             <ProductViewMirror
-              iFrameBaseURLMobile="https://mobile.d1lmusw209sqn4.amplifyapp.com/"
-              iFrameBaseURLDesktop="https://main.d1lmusw209sqn4.amplifyapp.com/"
+              iFrameBaseURLMobile="https://main.d1iyqjpav8ryhy.amplifyapp.com/"
+              iFrameBaseURLDesktop="https://main.d1iyqjpav8ryhy.amplifyapp.com/"
               productID={product.data.productID}
               skeJSON={product.data.skeJson}
               texJSON={product.data.texJson}
