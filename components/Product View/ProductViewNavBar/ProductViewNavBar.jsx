@@ -1,16 +1,28 @@
 import { useRouter } from "next/navigation";
-import { ChevronLeftIcon } from "@heroicons/react/24/solid";
+import {
+  ChevronLeftIcon,
+  CameraIcon,
+  ArrowPathIcon,
+} from "@heroicons/react/24/solid";
 
-const ProductViewNavBar = () => {
+const ProductViewNavBar = ({ callback_OnCameraSwitch }) => {
   const router = useRouter();
 
   return (
-    <section className="absolute top-0 left-0 flex w-fit h-auto py-4 px-2 z-20">
+    <section className="absolute top-0 left-0 right-0 flex items-center justify-between h-auto py-4 px-4 z-20">
       <button
         onClick={() => router.back()}
         className="p-2 bg-white text-black rounded-full shadow-xl"
       >
         <ChevronLeftIcon className="w-5 h-5" />
+      </button>
+
+      <button
+        onClick={() => callback_OnCameraSwitch(true)}
+        className="flex items-center justify-center p-2 gap-4 bg-white text-black rounded-full shadow-xl"
+      >
+        <ArrowPathIcon className="w-5 h-5" />
+        <CameraIcon className="w-5 h-5" />
       </button>
     </section>
   );

@@ -6,11 +6,15 @@ import ProductViewNavBar from "@/components/Product View/ProductViewNavBar/Produ
 import useProduct from "@/hooks/useProduct";
 import { useEffect, useState } from "react";
 import ProductViewMirror from "@/components/Product View/ProductViewMirror/ProductViewMirror";
+import { useSearchParams } from "next/navigation";
 
 const ProductView = ({ params }) => {
   const { product, isProductLoading, isProductError } = useProduct(
     params.productID
   );
+
+  const searchParams = useSearchParams();
+  const debugMode = searchParams.get("debug");
 
   const [analyticsViewsFields, setAnalyticsViewsFields] = useState({
     productID: 0,
@@ -28,6 +32,8 @@ const ProductView = ({ params }) => {
     videosInAR: 9,
     views360: 10,
   });
+
+  const [switchCamera, setSwitchCamera] = useState(false);
 
   console.log("Product Data Fetched: ");
   console.log(product);
@@ -87,9 +93,13 @@ const ProductView = ({ params }) => {
     }
   };
 
+  function Callback_OnCameraSwitch(doSwitch) {
+    setSwitchCamera(doSwitch);
+  }
+
   return (
     <main className="flex md:flex-row flex-col items-center justify-center w-screen h-[100svh] bg-white">
-      <ProductViewNavBar />
+      <ProductViewNavBar callback_OnCameraSwitch={Callback_OnCameraSwitch} />
       {isProductLoading && (
         <section className="flex flex-col p-4 gap-2 items-center justify-between w-full text-gray-500">
           <LoadingIndicator />
@@ -141,6 +151,9 @@ const ProductView = ({ params }) => {
               skeJSON={product.data.skeJson}
               texJSON={product.data.texJson}
               texPNG={product.data.texPng}
+              debugMode={debugMode}
+              switchCam={switchCamera}
+              callback_SwitchCam={Callback_OnCameraSwitch}
             />
           </div>
           <div className="absolute w-full h-full z-10">

@@ -1,12 +1,17 @@
+import { useParams } from "next/navigation";
 import { NextResponse, userAgent } from "next/server";
+import { useEffect } from "react";
 
 const ProductViewMirror = ({
   iFrameBaseURLMobile,
   iFrameBaseURLDesktop,
+  debugMode,
   productID,
   skeJSON,
   texJSON,
   texPNG,
+  switchCam,
+  callback_SwitchCam,
 }) => {
   let iFrameSrc = "";
   let iFrameParams = [
@@ -14,7 +19,15 @@ const ProductViewMirror = ({
     "skeJson=" + skeJSON,
     "texJson=" + texJSON,
     "texPng=" + texPNG,
+    "debug=" + (debugMode ? debugMode : 0),
   ];
+
+  useEffect(() => {
+    if (switchCam) {
+      HandleCamSwitch();
+      callback_SwitchCam(false);
+    }
+  }, [switchCam]);
 
   function GenerateFrameSrc() {
     iFrameSrc = (isMobile() ? iFrameBaseURLMobile : iFrameBaseURLDesktop) + "?";
@@ -43,13 +56,25 @@ const ProductViewMirror = ({
     );
   }
 
+  function HandleCamSwitch() {
+    let iframe = document.getElementById("MirrorFrame");
+    let iframeWindow = iframe.contentWindow;
+
+    if (iframeWindow.toggleCamera) {
+      iframeWindow.toggleCamera();
+    } else {
+      console.log("CAM TOGGLE FUNCTION NOT FOUND");
+    }
+  }
+
   return (
     <iframe
+      id="MirrorFrame"
       src={GenerateFrameSrc()}
       width="100%"
       height="100%"
       allow="camera"
-      className="z-0 border-2 border-red-500 overflow-clip"
+      className="z-0 overflow-clip"
     ></iframe>
   );
 };
