@@ -60,11 +60,13 @@ const ProductViewMirror = ({
     let iframe = document.getElementById("MirrorFrame");
     let iframeWindow = iframe.contentWindow;
 
-    if (iframeWindow.toggleCamera) {
+    iframeWindow.postMessage({ switchCam: true }, "*");
+
+    /*if (iframeWindow.toggleCamera) {
       iframeWindow.toggleCamera();
     } else {
       console.log("CAM TOGGLE FUNCTION NOT FOUND");
-    }
+    }*/
   }
 
   return (
