@@ -1,9 +1,9 @@
 const owner_baseURL =
   "https://0zwhtezm4f.execute-api.ap-south-1.amazonaws.com/TryItFirst/owner_companies?ownerID=";
 const company_baseURL =
-  "https://0zwhtezm4f.execute-api.ap-south-1.amazonaws.com/TryItFirst/mirror_product/company?companyID=";
+  "https://f2zxw8fu5k.execute-api.ap-south-1.amazonaws.com/TryItMirror/company?companyID=";
 const product_baseURL =
-  "https://0zwhtezm4f.execute-api.ap-south-1.amazonaws.com/TryItFirst/mirror_product?productID=";
+  "https://f2zxw8fu5k.execute-api.ap-south-1.amazonaws.com/TryItMirror/product?productID=";
 
 export async function fetcher_Owner(ownerID) {
   const response = await fetch(owner_baseURL + ownerID);

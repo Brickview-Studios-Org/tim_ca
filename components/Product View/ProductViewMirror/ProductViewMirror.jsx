@@ -60,7 +60,7 @@ const ProductViewMirror = ({
     let iframe = document.getElementById("MirrorFrame");
     let iframeWindow = iframe.contentWindow;
 
-    iframeWindow.postMessage({ switchCam: true , offsetX:5 }, "*");
+    iframeWindow.postMessage({ switchCam: true }, "*");
 
     /*if (iframeWindow.toggleCamera) {
       iframeWindow.toggleCamera();
