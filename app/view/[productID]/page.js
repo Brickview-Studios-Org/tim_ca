@@ -42,6 +42,7 @@ const ProductView = ({ params }) => {
   });
 
   const [switchCamera, setSwitchCamera] = useState(false);
+  const [newProductData, setNewProductData] = useState(null);
   const [newProductID, setNewProductID] = useState(null);
 
   console.log("Product Data Fetched: ");
@@ -49,6 +50,7 @@ const ProductView = ({ params }) => {
 
   useEffect(() => {
     if (product) {
+      setNewProductData(product);
       SetAnalyticsData(product);
     }
   }, [product]);
@@ -106,9 +108,10 @@ const ProductView = ({ params }) => {
     setSwitchCamera(doSwitch);
   }
 
-  function Callback_OnChange_Product(productID) {
+  function Callback_OnChange_Product(productID, productData) {
     console.log("Product change attempt to - " + productID);
     setNewProductID(productID);
+    setNewProductData({ data: productData });
   }
 
   return (
@@ -150,7 +153,8 @@ const ProductView = ({ params }) => {
           </section>
         ))}
 
-      {product &&
+      {newProductData != null &&
+        product &&
         product.data != null &&
         !isProductError &&
         company &&
@@ -171,7 +175,7 @@ const ProductView = ({ params }) => {
               />
             </div>
             <div className="absolute top-4 bottom-4 left-4 right-4">
-              <ProductViewInfoCard productInfo={product} />
+              <ProductViewInfoCard productInfo={newProductData} />
               <ProductViewCatalogue
                 catalogue={company.catalogue}
                 selectedProductID={product.data.productID}
