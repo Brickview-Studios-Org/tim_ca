@@ -7,14 +7,22 @@ import useProduct from "@/hooks/useProduct";
 import { useEffect, useState } from "react";
 import ProductViewMirror from "@/components/Product View/ProductViewMirror/ProductViewMirror";
 import { useSearchParams } from "next/navigation";
+import useCompany from "@/hooks/useCompany";
+import { PlusIcon } from "@heroicons/react/24/solid";
+import ProductViewCatalogue from "@/components/Product View/ProductViewCatalogue/ProductViewCatalogue";
 
 const ProductView = ({ params }) => {
+  const searchParams = useSearchParams();
+  const debugMode = searchParams.get("debug");
+  const companyIDQuery = searchParams.get("companyID");
+
   const { product, isProductLoading, isProductError } = useProduct(
     params.productID
   );
 
-  const searchParams = useSearchParams();
-  const debugMode = searchParams.get("debug");
+  const { company, isCompanyLoading, isCompanyError } = useCompany(
+    parseInt(companyIDQuery)
+  );
 
   const [analyticsViewsFields, setAnalyticsViewsFields] = useState({
     productID: 0,
@@ -34,6 +42,7 @@ const ProductView = ({ params }) => {
   });
 
   const [switchCamera, setSwitchCamera] = useState(false);
+  const [newProductID, setNewProductID] = useState(null);
 
   console.log("Product Data Fetched: ");
   console.log(product);
@@ -97,70 +106,82 @@ const ProductView = ({ params }) => {
     setSwitchCamera(doSwitch);
   }
 
+  function Callback_OnChange_Product(productID) {
+    console.log("Product change attempt to - " + productID);
+    setNewProductID(productID);
+  }
+
   return (
-    <main className="flex md:flex-row flex-col items-center justify-center w-screen h-[100svh] bg-white">
+    <main className="flex md:flex-row flex-col items-center justify-center w-screen h-[100svh] bg-black">
       <ProductViewNavBar callback_OnCameraSwitch={Callback_OnCameraSwitch} />
-      {isProductLoading && (
-        <section className="flex flex-col p-4 gap-2 items-center justify-between w-full text-gray-500">
-          <LoadingIndicator />
-          <span className="font-semibold lg:text-xl">Loading Product</span>
-          <span className="font-light text-xs lg:text-sm">Please wait</span>
-        </section>
-      )}
-
-      {product && product.data == null && !isProductLoading && (
-        <section className="flex flex-col p-4 gap-2 items-center justify-between w-full text-red-500">
-          <span className="font-semibold lg:text-xl">
-            Sorry, there was an error while loading data
-          </span>
-          <span className="font-light text-xs lg:text-sm">
-            Please refresh the page if you still see an error after 30 secs
-          </span>
-        </section>
-      )}
-
-      {isProductError && (
-        <section className="flex flex-col p-4 gap-2 items-center justify-between w-full text-red-500">
-          <span className="font-semibold lg:text-xl">
-            Sorry, there was an error while loading data
-          </span>
-          <span className="font-light text-xs lg:text-sm">
-            Please refresh the page if you still see an error after 30 secs
-          </span>
-        </section>
-      )}
-
-      {/*product && product.data != null && !isProductError && (
-        <section className="flex md:flex-row flex-col md:items-center md:justify-center md:gap-6 md:p-6 w-full h-full">
-          <section className="w-full md:h-2/3 h-1/3 bg-white">
-            <ProductViewModelCard productInfo={product} />
+      {isProductLoading ||
+        (isCompanyLoading && (
+          <section className="flex flex-col p-4 gap-2 items-center justify-between w-full text-gray-500">
+            <LoadingIndicator />
+            <span className="font-semibold lg:text-xl">Loading Product</span>
+            <span className="font-light text-xs lg:text-sm">Please wait</span>
           </section>
-          <section className="z-10 w-full h-2/3 bg-gray-100 md:rounded-3xl rounded-t-3xl shadow-[0_10px_25px_5px_rgba(0,0,0,0.25)] border-gray-300 border-t-2">
-            <ProductViewInfoCard productInfo={product} />
-          </section>
-        </section>
-      )*/}
+        ))}
 
-      {product && product.data != null && !isProductError && (
-        <section className="flex flex-col items-center justify-center w-full h-full">
-          <div className="flex items-center justify-center w-full h-full text-white bg-gray-900">
-            <ProductViewMirror
-              iFrameBaseURLMobile="https://main.d1iyqjpav8ryhy.amplifyapp.com/"
-              iFrameBaseURLDesktop="https://main.d1iyqjpav8ryhy.amplifyapp.com/"
-              productID={product.data.productID}
-              skeJSON={product.data.skeJson}
-              texJSON={product.data.texJson}
-              texPNG={product.data.texPng}
-              debugMode={debugMode}
-              switchCam={switchCamera}
-              callback_SwitchCam={Callback_OnCameraSwitch}
-            />
-          </div>
-          <div className="absolute w-full h-full z-10">
-            <ProductViewInfoCard productInfo={product} />
-          </div>
-        </section>
-      )}
+      {product &&
+        product.data == null &&
+        !isProductLoading &&
+        company &&
+        !isCompanyLoading && (
+          <section className="flex flex-col p-4 gap-2 items-center justify-between w-full text-red-500">
+            <span className="font-semibold lg:text-xl">
+              Sorry, there was an error while loading data
+            </span>
+            <span className="font-light text-xs lg:text-sm">
+              Please refresh the page if you still see an error after 30 secs
+            </span>
+          </section>
+        )}
+
+      {isProductError ||
+        (isCompanyError && (
+          <section className="flex flex-col p-4 gap-2 items-center justify-between w-full text-red-500">
+            <span className="font-semibold lg:text-xl">
+              Sorry, there was an error while loading data
+            </span>
+            <span className="font-light text-xs lg:text-sm">
+              Please refresh the page if you still see an error after 30 secs
+            </span>
+          </section>
+        ))}
+
+      {product &&
+        product.data != null &&
+        !isProductError &&
+        company &&
+        !isCompanyError && (
+          <section className="flex flex-col items-center justify-center w-full h-full">
+            <div className="flex items-center justify-center w-full h-full text-white bg-gray-900">
+              <ProductViewMirror
+                iFrameBaseURLMobile="https://main.d1iyqjpav8ryhy.amplifyapp.com/"
+                iFrameBaseURLDesktop="https://main.d1iyqjpav8ryhy.amplifyapp.com/"
+                productID={product.data.productID}
+                skeJSON={product.data.skeJson}
+                texJSON={product.data.texJson}
+                texPNG={product.data.texPng}
+                debugMode={debugMode}
+                newProductID={newProductID}
+                switchCam={switchCamera}
+                callback_SwitchCam={Callback_OnCameraSwitch}
+              />
+            </div>
+            <div className="absolute top-4 bottom-4 left-4 right-4">
+              <ProductViewInfoCard productInfo={product} />
+              <ProductViewCatalogue
+                catalogue={company.catalogue}
+                selectedProductID={product.data.productID}
+                categories={company.company[0].categories}
+                selectedCategory={[product.data.category]}
+                callback_OnChange_SelectedProduct={Callback_OnChange_Product}
+              />
+            </div>
+          </section>
+        )}
     </main>
   );
 };

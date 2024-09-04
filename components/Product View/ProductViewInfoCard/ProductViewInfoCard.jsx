@@ -13,8 +13,10 @@ const ProductViewInfoCard = ({ productInfo }) => {
 
   return (
     <section
-      className={`absolute bottom-5 left-5 right-5 flex flex-col items-center justify-between overflow-clip transition-all ease-in-out duration-100 z-20 ${
-        isInfoExpanded ? "h-[40rem] rounded-3xl" : "h-20 rounded-full"
+      className={`absolute bottom-0 left-0 flex flex-col items-center justify-between overflow-clip transition-all ease-in-out duration-300 ${
+        isInfoExpanded
+          ? "right-0 h-[40rem] rounded-2xl z-30"
+          : "right-[6.25rem] h-20 rounded-[2.5rem] z-20"
       }`}
     >
       {/* Header */}
@@ -35,7 +37,7 @@ const ProductViewInfoCard = ({ productInfo }) => {
       </div>
 
       {/* Content */}
-      <div className="flex flex-col items-center justify-end h-[35rem] w-full bg-white">
+      <div className="flex flex-col items-center justify-end h-full w-full bg-white">
         <div className="relative flex flex-col px-4 py-2 h-[20.25rem] w-full">
           <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-t from-white from-40% z-10" />
           <h1 className="w-full pb-2 text-black text-lg font-medium bg-white">

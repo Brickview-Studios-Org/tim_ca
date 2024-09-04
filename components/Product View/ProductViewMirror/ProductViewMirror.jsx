@@ -10,6 +10,7 @@ const ProductViewMirror = ({
   skeJSON,
   texJSON,
   texPNG,
+  newProductID,
   switchCam,
   callback_SwitchCam,
 }) => {
@@ -28,6 +29,12 @@ const ProductViewMirror = ({
       callback_SwitchCam(false);
     }
   }, [switchCam]);
+
+  useEffect(() => {
+    if (newProductID != null) {
+      HandleProductChange(newProductID);
+    }
+  }, [newProductID]);
 
   function GenerateFrameSrc() {
     iFrameSrc = (isMobile() ? iFrameBaseURLMobile : iFrameBaseURLDesktop) + "?";
@@ -67,6 +74,13 @@ const ProductViewMirror = ({
     } else {
       console.log("CAM TOGGLE FUNCTION NOT FOUND");
     }*/
+  }
+
+  function HandleProductChange(productID) {
+    let iframe = document.getElementById("MirrorFrame");
+    let iframeWindow = iframe.contentWindow;
+
+    iframeWindow.postMessage({ newDressID: productID }, "*");
   }
 
   return (
