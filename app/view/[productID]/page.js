@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import ProductViewMirror from "@/components/Product View/ProductViewMirror/ProductViewMirror";
 import { useSearchParams } from "next/navigation";
 import useCompany from "@/hooks/useCompany";
-import { PlusIcon } from "@heroicons/react/24/solid";
 import ProductViewCatalogue from "@/components/Product View/ProductViewCatalogue/ProductViewCatalogue";
 
 const ProductView = ({ params }) => {
