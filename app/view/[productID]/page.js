@@ -1,5 +1,4 @@
 "use client";
-import axios from "axios";
 import LoadingIndicator from "@/components/Common/LoadingIndicator";
 import ProductViewInfoCard from "@/components/Product View/ProductViewInfoCard/ProductViewInfoCard";
 import ProductViewNavBar from "@/components/Product View/ProductViewNavBar/ProductViewNavBar";
@@ -21,24 +20,7 @@ const ProductView = ({ params }) => {
 
   const { company, isCompanyLoading, isCompanyError } = useCompany(
     parseInt(companyIDQuery)
-  );
-
-  const [analyticsViewsFields, setAnalyticsViewsFields] = useState({
-    productID: 0,
-    ARloadtime: 100,
-    ARviews: 1,
-    clicksToAddToCart: 2,
-    clicksToWishlist: 3,
-    clickToColorChange: 4,
-    clickToTextureChange: 5,
-    duration360: 6,
-    durationAR: 7,
-    Loadtime360: 100,
-    productSKU: 0,
-    screenshotsInAR: 8,
-    videosInAR: 9,
-    views360: 10,
-  });
+  );  
 
   const [switchCamera, setSwitchCamera] = useState(false);
   const [newProductData, setNewProductData] = useState(null);
@@ -48,60 +30,10 @@ const ProductView = ({ params }) => {
   console.log(product);
 
   useEffect(() => {
-    if (product) {
-      setNewProductData(product);
-      SetAnalyticsData(product);
+    if (product?.data) {
+      setNewProductData(product);      
     }
-  }, [product]);
-
-  useEffect(() => {
-    if (product) {
-      console.log("Uploading analytics data");
-      uploadAnalytics();
-    }
-  }, [analyticsViewsFields]);
-
-  function SetAnalyticsData(productData) {
-    var anl_data = {
-      productID: productData.data.productID,
-      ARloadtime: 100,
-      ARviews: 1,
-      clicksToAddToCart: 2,
-      clicksToWishlist: 3,
-      clickToColorChange: 4,
-      clickToTextureChange: 5,
-      duration360: 6,
-      durationAR: 7,
-      Loadtime360: 100,
-      productSKU: 0,
-      screenshotsInAR: 8,
-      videosInAR: 9,
-      views360: 10,
-    };
-
-    setAnalyticsViewsFields(anl_data);
-    console.log("Analytics data set: " + JSON.stringify(analyticsViewsFields));
-  }
-
-  const uploadAnalytics = async () => {
-    console.log(
-      "Uploading analytics - " + JSON.stringify(analyticsViewsFields)
-    );
-    try {
-      const response = await axios.patch(
-        "https://0zwhtezm4f.execute-api.ap-south-1.amazonaws.com/TryItFirst/analytics/views",
-        analyticsViewsFields
-      );
-
-      if (response.status === 200) {
-        console.log("Analytics data upload successful");
-      } else {
-        console.log("Analytics upload error");
-      }
-    } catch (err) {
-      console.log("Analytics upload error");
-    }
-  };
+  }, [product]);  
 
   function Callback_OnCameraSwitch(doSwitch) {
     setSwitchCamera(doSwitch);

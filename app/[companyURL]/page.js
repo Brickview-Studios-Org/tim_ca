@@ -1,20 +1,19 @@
 "use client";
 
-import { useState, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 import PrimaryNav from "@/components/PrimaryNav/PrimaryNav";
 import ProductGrid from "@/components/ProductGrid/ProductGrid";
 import useCompany from "@/hooks/useCompany";
 import ModalAbout from "@/components/ModalAbout/ModalAbout";
 import ModalFilters from "@/components/ModalFilters/ModalFilters";
+import Image from "next/image";
 
-const Home = () => {
-  const searchParams = useSearchParams();
-  const companyIDQuery = searchParams.get("companyID");
-
+const CompanyHome = ({ params }) => {
   const { company, isCompanyLoading, isCompanyError } = useCompany(
-    companyIDQuery ? parseInt(companyIDQuery) : 1713691422725
+    params.companyURL,
+    true
   );
+  
   const [activeCategory, setActiveCategory] = useState(["All"]);
   const [activeOutlet, setActiveOutlet] = useState(-1);
   const [activePriceRange, setActivePriceRange] = useState({
@@ -61,43 +60,29 @@ const Home = () => {
 
   if (isCompanyLoading) {
     return (
-      <Suspense>
+      
         <div className="flex bg-spoon-grey p-8 w-screen h-screen justify-center items-center">
           <h2 className="text-spoon-blue font-normal text-lg">
             Loading Brand Info
           </h2>
         </div>
-      </Suspense>
+      
     );
   }  
 
   if (isCompanyError) {
-    return (
-      <Suspense>
+    return (      
         <div className="flex bg-gray-400 p-8 w-screen h-screen justify-center items-center">
           <h2 className="text-red-900 font-normal text-lg">
             There was an error
           </h2>
         </div>
-      </Suspense>
+      
     );
   }
 
-  return (
-    <Suspense>    
-      {!company.company[0] && (
-        <main className="h-[100svh] w-full bg-white overflow-auto">
-          <div className="flex flex-col items-center justify-center w-full h-full gap-4">
-            <h1 className="font-bold text-2xl text-red-400">Sorry!</h1>
-            <div className="flex flex-col items-center justify-center w-full font-semibold text-lg text-gray-400">
-              <h2>No company found</h2>
-              <h3>with ID : {companyIDQuery ? companyIDQuery : 104}</h3>
-            </div>
-          </div>
-        </main>
-      )}
-
-      {company.company[0] && (
+  if(company?.company) {
+    return (
         <main className="h-[100svh] w-full bg-white overflow-auto">
           <ModalAbout
             doOpen={openAboutUsModal}
@@ -126,9 +111,27 @@ const Home = () => {
             priceRange={activePriceRange}
           />
         </main>
-      )}      
-    </Suspense>
-  );
+    )
+  }
+  else {
+    return (
+        <main className="h-[100svh] w-full bg-white overflow-auto">
+        <div className="flex flex-col items-center justify-center w-full h-full gap-6 p-8">
+          <Image
+            src="/Logos/TIF_Logo.svg"
+            alt="Try It First Logo"
+            width={200}
+            height={32}
+            className="animate-slideInSpringedBottom pb-2"
+          />
+
+          <h2 className="text-red-500 font-normal text-lg text-center">
+            Sorry, we couldn't find the page you are looking for
+          </h2>
+        </div>
+      </main>
+    )
+  }  
 };
 
-export default Home;
+export default CompanyHome;

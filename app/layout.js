@@ -12,9 +12,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <Suspense>
+      {/*<Suspense>*/}
         <body className={roboto.className}>{children}</body>
-      </Suspense>
+      {/*</Suspense>*/}
     </html>
   );
 }

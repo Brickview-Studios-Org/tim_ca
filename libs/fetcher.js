@@ -1,7 +1,7 @@
 const owner_baseURL =
   "https://0zwhtezm4f.execute-api.ap-south-1.amazonaws.com/TryItFirst/owner_companies?ownerID=";
 const company_baseURL =
-  "https://f2zxw8fu5k.execute-api.ap-south-1.amazonaws.com/TryItMirror/company?companyID=";
+  "https://f2zxw8fu5k.execute-api.ap-south-1.amazonaws.com/TryItMirror/company";
 const product_baseURL =
   "https://f2zxw8fu5k.execute-api.ap-south-1.amazonaws.com/TryItMirror/product?productID=";
 const plugin_baseURL =
@@ -14,7 +14,15 @@ export async function fetcher_Owner(ownerID) {
 }
 
 export async function fetcher_Company(companyID) {
-  const response = await fetch(company_baseURL + companyID);
+  const apiURL = company_baseURL + "?companyID=" + companyID;
+  const response = await fetch(apiURL);
+  const data = await response.json();
+  return data;
+}
+
+export async function fetcher_CompanyURL(companyURL) {
+  const apiURL = company_baseURL + "/url?companyURL=" + companyURL;
+  const response = await fetch(apiURL);
   const data = await response.json();
   return data;
 }
